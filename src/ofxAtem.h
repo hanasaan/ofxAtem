@@ -35,11 +35,13 @@ namespace ofxAtem
         void setProgramId(int id);
         void setPreviewId(int id);
         void setAutoRate(uint32_t frames);
+        void setTransitionPosition(float pos);
         
         int getProgramId() const { return program; }
         int getPreviewId() const { return preview; }
         string getProductName() const { return product_name; }
         string getVideoModeString() const { return video_mode; }
+        bool isInTransition() const;
         bool isConnected() const { return connectionStatus; }
         
         void setAutoReconnect(bool b) { b_autoreconnect = b; }

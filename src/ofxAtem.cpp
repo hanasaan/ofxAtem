@@ -276,5 +276,21 @@ namespace ofxAtem
             }
         }
     }
+    
+    void Controller::setTransitionPosition(float pos)
+    {
+        if (mMixEffectBlock) {
+            HRESULT result;
+            IBMDSwitcherTransitionMixParameters* mTransitionMixParameters=NULL;
+            result = mMixEffectBlock->SetFloat(bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, pos);
+        }
+    }
+    
+    bool Controller::isInTransition() const
+    {
+        bool inTransition;
+        mMixEffectBlock->GetFlag(bmdSwitcherMixEffectBlockPropertyIdInTransition, &inTransition);
+        return inTransition;
+    }
 }
 
