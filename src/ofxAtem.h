@@ -46,6 +46,9 @@ namespace ofxAtem
         
         void setAutoReconnect(bool b) { b_autoreconnect = b; }
         bool isAutoReconnect() const { return b_autoreconnect; }
+        
+        int getAux(int index) const;
+        void setAux(int index, int id);
     protected:
         void init();
         
@@ -66,6 +69,8 @@ namespace ofxAtem
         std::vector<InputMonitor*>	mInputMonitors;
         std::vector<IBMDSwitcherInputAux*>	mSwitcherInputAuxList;
         std::vector<BMDSwitcherInputId*>	mInputIds;
+        
+        vector<int64_t> auxoutputs;
     };
 }
 

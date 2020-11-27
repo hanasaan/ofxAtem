@@ -137,6 +137,7 @@ namespace ofxAtem
                 if (SUCCEEDED(result))
                 {
                     IBMDSwitcherInput* input = NULL;
+                    BMDSwitcherInputId id;
                     while (S_OK == inputIterator->Next(&input))
                     {
                         InputMonitor* inputMonitor = new InputMonitor(input, this);
@@ -234,6 +235,11 @@ namespace ofxAtem
             mMixEffectBlock->GetInt(bmdSwitcherMixEffectBlockPropertyIdProgramInput, &program);
             mMixEffectBlock->GetInt(bmdSwitcherMixEffectBlockPropertyIdPreviewInput, &preview);
         }
+        auxoutputs.resize(mSwitcherInputAuxList.size());
+        int idx = 0;
+        for (auto & s : mSwitcherInputAuxList) {
+            s->GetInputSource(&auxoutputs[idx++]);
+        }
     }
     
     void Controller::performCut()
@@ -291,6 +297,21 @@ namespace ofxAtem
         bool inTransition;
         mMixEffectBlock->GetFlag(bmdSwitcherMixEffectBlockPropertyIdInTransition, &inTransition);
         return inTransition;
+    }
+    
+    int Controller::getAux(int index) const
+    {
+        if (index >= 0 && index < auxoutputs.size()) {
+            return auxoutputs.at(index);
+        }
+        return 0;
+    }
+    
+    void Controller::setAux(int index, int id)
+    {
+        if (index >= 0 && index < auxoutputs.size()) {
+            mSwitcherInputAuxList[index]->SetInputSource(id);
+        }
     }
 }
 
