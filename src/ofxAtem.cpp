@@ -114,7 +114,7 @@ namespace ofxAtem
                     if (FAILED(mSwitcher->GetString(bmdSwitcherPropertyIdProductName, (CFStringRef*)&productName)))
                     {
                         cout << "Could not get switcher product name" << endl;
-                        return;
+                        return false;
                     }
                     this->product_name = getCStringFromCFString(productName);
                 }
@@ -124,7 +124,7 @@ namespace ofxAtem
                     if (FAILED(mSwitcher->GetInt(bmdSwitcherPropertyIdVideoMode, &val)))
                     {
                         cout << "Could not get switcher video mode" << endl;
-                        return;
+                        return false;
                     }
                     BMDSwitcherVideoMode mode = (BMDSwitcherVideoMode) val;
                     this->video_mode = toVideoModeString(mode);
