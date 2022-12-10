@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BMDSwitcherAPI.h"
+#include <atomic>
 
 namespace ofxAtem {
     class Controller;
@@ -14,19 +15,14 @@ namespace ofxAtem {
         virtual ~SwitcherMonitor(){};
         
     public:
-        HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv);
-        
-        ULONG STDMETHODCALLTYPE AddRef(void);
-        
-        ULONG STDMETHODCALLTYPE Release(void);
-        
-        // Switcher Property changes ignored by this sample app
-        HRESULT STDMETHODCALLTYPE	PropertyChanged(BMDSwitcherPropertyId propId);
-        HRESULT STDMETHODCALLTYPE	Disconnected(void);
-        
+        HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) override;
+        ULONG STDMETHODCALLTYPE AddRef(void) override;
+        ULONG STDMETHODCALLTYPE Release(void) override;
+        HRESULT STDMETHODCALLTYPE Notify (BMDSwitcherEventType eventType,  BMDSwitcherVideoMode coreVideoMode) override;
+
     private:
         Controller*	mUiDelegate;
-        int							mRefCount;
+        std::atomic<std::int32_t> mRefCount;
     };
 }
 

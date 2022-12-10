@@ -111,20 +111,20 @@ namespace ofxAtem
                 CFStringRef ID;
                 
                 {
-                    if (FAILED(mSwitcher->GetString(bmdSwitcherPropertyIdProductName, (CFStringRef*)&productName)))
+                    if (FAILED(mSwitcher->GetProductName(&productName)))
                     {
                         cout << "Could not get switcher product name" << endl;
-                        return;
+                        return false;
                     }
                     this->product_name = getCStringFromCFString(productName);
                 }
                 
                 {
-                    int64_t val = 0;
-                    if (FAILED(mSwitcher->GetInt(bmdSwitcherPropertyIdVideoMode, &val)))
+                    BMDSwitcherVideoMode val = 0;
+                    if (FAILED(mSwitcher->GetVideoMode(&val)))
                     {
                         cout << "Could not get switcher video mode" << endl;
-                        return;
+                        return false;
                     }
                     BMDSwitcherVideoMode mode = (BMDSwitcherVideoMode) val;
                     this->video_mode = toVideoModeString(mode);
@@ -232,8 +232,8 @@ namespace ofxAtem
             reconnect();
         }
         if (mMixEffectBlock) {
-            mMixEffectBlock->GetInt(bmdSwitcherMixEffectBlockPropertyIdProgramInput, &program);
-            mMixEffectBlock->GetInt(bmdSwitcherMixEffectBlockPropertyIdPreviewInput, &preview);
+            mMixEffectBlock->GetPreviewInput(&preview);
+            mMixEffectBlock->GetProgramInput(&program);
         }
         auxoutputs.resize(mSwitcherInputAuxList.size());
         int idx = 0;
@@ -259,14 +259,14 @@ namespace ofxAtem
     void Controller::setProgramId(int id)
     {
         if (mMixEffectBlock) {
-            mMixEffectBlock->SetInt(bmdSwitcherMixEffectBlockPropertyIdProgramInput, id);
+            mMixEffectBlock->SetProgramInput(id);
         }
     }
     
     void Controller::setPreviewId(int id)
     {
         if (mMixEffectBlock) {
-            mMixEffectBlock->SetInt(bmdSwitcherMixEffectBlockPropertyIdPreviewInput, id);
+            mMixEffectBlock->SetPreviewInput(id);
         }
     }
     
@@ -288,14 +288,14 @@ namespace ofxAtem
         if (mMixEffectBlock) {
             HRESULT result;
             IBMDSwitcherTransitionMixParameters* mTransitionMixParameters=NULL;
-            result = mMixEffectBlock->SetFloat(bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, pos);
+            result = mMixEffectBlock->SetTransitionPosition(pos);
         }
     }
     
     bool Controller::isInTransition() const
     {
         bool inTransition;
-        mMixEffectBlock->GetFlag(bmdSwitcherMixEffectBlockPropertyIdInTransition, &inTransition);
+        mMixEffectBlock->GetInTransition(&inTransition);
         return inTransition;
     }
     
