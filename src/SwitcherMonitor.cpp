@@ -37,28 +37,26 @@ HRESULT STDMETHODCALLTYPE SwitcherMonitor::QueryInterface(REFIID iid, LPVOID *pp
 
 ULONG STDMETHODCALLTYPE SwitcherMonitor::AddRef(void)
 {
-	return ::OSAtomicIncrement32(&mRefCount);
+	return mRefCount++;
 }
 
 ULONG STDMETHODCALLTYPE SwitcherMonitor::Release(void)
 {
-	int newCount = ::OSAtomicDecrement32(&mRefCount);
+	auto newCount = mRefCount++;
 	if (newCount == 0)
 		delete this;
 	return newCount;
 }
 
-HRESULT STDMETHODCALLTYPE	SwitcherMonitor::PropertyChanged(BMDSwitcherPropertyId propId) { 
-	return S_OK; 
+HRESULT STDMETHODCALLTYPE SwitcherMonitor::Notify (BMDSwitcherEventType eventType,  BMDSwitcherVideoMode coreVideoMode) {
+    return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE	SwitcherMonitor::Disconnected(void)
-{
-    mUiDelegate->connectionStatus = 0;
-    if (mUiDelegate->isAutoReconnect()) {
-        mUiDelegate->reconnect();
-    }
-	return S_OK;
-}
-
-
+//HRESULT STDMETHODCALLTYPE	SwitcherMonitor::Disconnected(void)
+//{
+//    mUiDelegate->connectionStatus = 0;
+//    if (mUiDelegate->isAutoReconnect()) {
+//        mUiDelegate->reconnect();
+//    }
+//	return S_OK;
+//}
