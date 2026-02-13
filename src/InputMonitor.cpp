@@ -8,9 +8,6 @@ static inline bool	operator== (const REFIID& iid1, const REFIID& iid2)
 	return CFEqual(&iid1, &iid2);
 }
 
-// Monitor the properties on Switcher Inputs.
-// In this sample app we're only interested in changes to the Long Name property to update the PopupButton list
-
 using namespace ofxAtem;
 
 InputMonitor::InputMonitor(IBMDSwitcherInput* input, Controller* uiDelegate) : mInput(input), mUiDelegate(uiDelegate), mRefCount(1)
@@ -50,35 +47,18 @@ HRESULT STDMETHODCALLTYPE InputMonitor::QueryInterface(REFIID iid, LPVOID *ppv)
 
 ULONG STDMETHODCALLTYPE InputMonitor::AddRef(void)
 {
-	return ::OSAtomicIncrement32(&mRefCount);
+	return mRefCount++;
 }
 
 ULONG STDMETHODCALLTYPE InputMonitor::Release(void)
 {
-	int newCount = ::OSAtomicDecrement32(&mRefCount);
+	int newCount = mRefCount++;
 	if (newCount == 0)
 		delete this;
 	return newCount;
-}
-
-HRESULT InputMonitor::PropertyChanged(BMDSwitcherInputPropertyId propertyId)
-{
-	switch (propertyId)
-	{
-		case bmdSwitcherInputPropertyIdLongName:
-		
-		default:	// ignore other property changes not used for this sample app
-			break;
-	}
-	
-	return S_OK;
 }
 
 IBMDSwitcherInput* InputMonitor::input() 
 { 
 	return mInput; 
 }
-
-
-
-

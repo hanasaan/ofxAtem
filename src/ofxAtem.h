@@ -49,6 +49,9 @@ namespace ofxAtem
         
         int getAux(int index) const;
         void setAux(int index, int id);
+        
+        auto getInputMonitors() const { return mInputMonitors; }
+        
     protected:
         void init();
         
